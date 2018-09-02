@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class GzApplication {
-
     /**
      * Application很简单，一个main函数作为主入口。SpringApplication引导应用，
      * 并将Application本身作为参数传递给run方法。
