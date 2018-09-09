@@ -1,64 +1,50 @@
 package com.example.gz.controller;
 
-import com.example.gz.property.UserProperties;
+import com.example.gz.service.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 
 /**
- * @Controller 处理http请求
- * @RestController Spring4 之后新加的注解，原来返回json需要@ResponseBody配合@Controller
+ *  @ControllerAdvice : 注解定义全局异常处理类
+ *  @RestController : 声明为controller
+ *  @Api : swagger标题
+ *  @CrossOrigin ： 是用来处理跨域请求的注解
  */
+@CrossOrigin
 @RestController
-public class UserController {
-
-    /**
-     * @Autowired 将实体对象进行了依赖注入
-     */
-    @Autowired
-    UserProperties userProperties;
+@Api(value = "UserController")
+@ControllerAdvice
+public class UserController extends ReturnType {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
+    private IUserService userService;
 
     /**
-     * 定义了接口的名称
-     * @RequestMapping 配置url映射
+     * 登陆接口
+     * @param loginId
+     * @param password
      * @return
      */
-    @GetMapping("/getUser")
-    public String getUser() {
-        return userProperties.getName();
+    @ApiOperation(value = "用户登录验证", notes = "根据用户Id验证用户密码是否正确，进行登录验证; 登录成功后，置为上线")
+    @ApiImplicitParam(name = "loginId", value = "用户Id", paramType = "Query", required = true, dataType = "String")
+    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = "application/json")
+    public Map<?, ?> login(String loginId, String password) {
+
+        Map<?, ?> result = userService.userLogin(loginId, password);
+        return result;
     }
 
-
-    @RequestMapping("/getUsers")
-    public List<Map<String, Object>> getDbType(){
-        String sql = "select * from user";
-        List<Map<String, Object>> list =  jdbcTemplate.queryForList(sql);
-        for (Map<String, Object> map : list) {
-            Set<Map.Entry<String, Object>> entries = map.entrySet( );
-            if(entries != null) {
-                Iterator<Map.Entry<String, Object>> iterator = entries.iterator( );
-                while(iterator.hasNext( )) {
-                    Map.Entry<String, Object> entry =(Map.Entry<String, Object>) iterator.next( );
-                    Object key = entry.getKey( );
-                    Object value = entry.getValue();
-                    System.out.println(key+":"+value);
-                }
-            }
-        }
-        return list;
+    /**
+     * 修改密码
+     */
+    @RequestMapping(value = "/changePsw", method = RequestMethod.POST)
+    public Map<?, ?> changePsw(String loginId,String oldPsw,String newPsw){
+        System.out.println(loginId + " " + oldPsw + " " + newPsw);
+        return userService.changePsw(loginId, oldPsw, newPsw);
     }
-
-
 }

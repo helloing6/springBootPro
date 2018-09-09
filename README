@@ -1,0 +1,11 @@
+springboot常用注解
+
+@SpringBootApplication
+ 注解等价于以默认属性使用 @Configuration ， @EnableAutoConfiguration 和 @ComponentScan 。
+ 通常使用在有main方法中类中注解。
+
+返回结果
+code 200 正确
+result 返回结果
+
+

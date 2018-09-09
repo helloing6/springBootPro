@@ -1,5 +1,6 @@
 package com.example.gz;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @SpringBootApplication：Spring Boot 应用的标识
  * http://localhost:8080/
  */
+@MapperScan("com.example.gz.mapper") //扫描的mapper
 @SpringBootApplication
 public class GzApplication {
     /**
