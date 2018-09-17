@@ -1,7 +1,10 @@
 package com.example.gz.service.impl;
 
+import com.example.gz.bean.FunctionWithGroup;
 import com.example.gz.bean.UserGroup;
+import com.example.gz.dao.IFunctionWithGroupDao;
 import com.example.gz.dao.IGroupDao;
+import com.example.gz.dao.IUserWithGroupDao;
 import com.example.gz.service.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,12 @@ public class GroupServiceImpl implements IGroupService {
 
     @Autowired
     private IGroupDao groupDao;
-    Map<String, Object> result = new HashMap<>();
+    @Autowired
+    private IUserWithGroupDao userWithGroupDao;
+    @Autowired
+    private IFunctionWithGroupDao functionWithGroupDao;
+
+    private Map<String, Object> result = new HashMap<>();
 
     @Override
     public Map<?,?> save(UserGroup userGroup) {
@@ -76,6 +84,15 @@ public class GroupServiceImpl implements IGroupService {
     @Override
     public Map<?, ?> findAll() {
         List<UserGroup> res = groupDao.findAll();
+        result.put("code",200);
+        result.put("result",res);
+        return result;
+    }
+
+    @Override
+    public Map<?, ?> findByLoginId(String loginId) {
+        int groupId = userWithGroupDao.findByUserId(loginId).getGroupId();
+        List<FunctionWithGroup> res = functionWithGroupDao.findByGroupId(groupId);
         result.put("code",200);
         result.put("result",res);
         return result;

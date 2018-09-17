@@ -16,4 +16,5 @@ public interface IGroupService {
 
     Map<?,?> findAll();
 
+    Map<?,?> findByLoginId(String loginId);
 }

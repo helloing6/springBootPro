@@ -1,5 +1,6 @@
 package com.example.gz.controller;
 
+import com.example.gz.bean.FunctionWithGroup;
 import com.example.gz.bean.UserGroup;
 import com.example.gz.service.IGroupService;
 import io.swagger.annotations.Api;
@@ -7,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,7 +68,9 @@ public class GroupController {
     }
 
 
-
-
-
+    @ApiOperation(value = "查询权限")
+    @RequestMapping(value = "/selectFunc/{loginId}", method = RequestMethod.GET)
+    public Map<?, ?> selectFunc(@PathVariable("loginId") String loginId) {
+        return groupService.findByLoginId(loginId);
+    }
 }
